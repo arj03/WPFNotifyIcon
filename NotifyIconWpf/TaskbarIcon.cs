@@ -251,7 +251,6 @@ namespace Hardcodet.Wpf.TaskbarNotification
       }
     }
 
-
     /// <summary>
     /// Closes the current <see cref="CustomBalloon"/>, if the
     /// property is set.
@@ -875,9 +874,7 @@ namespace Hardcodet.Wpf.TaskbarNotification
           //write initial configuration
           var status = Util.WriteIconData(ref iconData, NotifyCommand.Add, members);
           if (!status)
-          {
-            throw new Win32Exception("Could not create icon data");
-          }
+              return;
 
           //set to most recent version
           SetVersion();

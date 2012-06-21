@@ -122,10 +122,25 @@ namespace Hardcodet.Wpf.TaskbarNotification
       if (IsDesignMode) return true;
 
       data.ValidMembers = flags;
-      lock (SyncRoot)
+      var status = false;
+      var failedTries = 0;
+      while (!status && failedTries < 30)
       {
-        return WinApi.Shell_NotifyIcon(command, ref data);
+          lock (SyncRoot)
+          {
+              status = WinApi.Shell_NotifyIcon(command, ref data);
+              if (status)
+              {
+                  return status;
+              }
+          }
+
+          // handle low powered machines during startup:
+          // http://msdn.microsoft.com/en-us/library/bb762159(VS.85).aspx
+          failedTries += 1;
+          System.Threading.Thread.Sleep(1000); // ms
       }
+      return false;
     }
 
     #endregion
