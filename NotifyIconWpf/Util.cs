@@ -105,7 +105,6 @@ namespace Hardcodet.Wpf.TaskbarNotification
       return WriteIconData(ref data, command, data.ValidMembers);
     }
 
-
     /// <summary>
     /// Updates the taskbar icons with data provided by a given
     /// <see cref="NotifyIconData"/> instance.
@@ -124,7 +123,7 @@ namespace Hardcodet.Wpf.TaskbarNotification
       data.ValidMembers = flags;
       var status = false;
       var failedTries = 0;
-      while (!status && failedTries < 30)
+      while (!status && failedTries < 5)
       {
           lock (SyncRoot)
           {
@@ -138,8 +137,11 @@ namespace Hardcodet.Wpf.TaskbarNotification
           // handle low powered machines during startup:
           // http://msdn.microsoft.com/en-us/library/bb762159(VS.85).aspx
           failedTries += 1;
-          System.Threading.Thread.Sleep(1000); // ms
+              
+          System.Threading.Thread.Sleep(100); // ms
       }
+
+        System.Console.WriteLine("failed to write icon data");
       return false;
     }
 
